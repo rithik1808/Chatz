@@ -1,16 +1,17 @@
+import { useState } from "react";
+import { useAuthStore } from "../store/useAuthStore";
 import {
-  EyeOff,
   Eye,
-  Key,
+  EyeOff,
+  Loader2,
+  Lock,
   Mail,
   MessageSquare,
   User,
-  Loader2,
 } from "lucide-react";
-import { useState } from "react";
-import useAuthStore from "../store/useAuthStore.js";
 import { Link } from "react-router-dom";
-import AuthImagePattern from "../components/AuthImagePattern.jsx";
+
+import AuthImagePattern from "../components/AuthImagePattern";
 import toast from "react-hot-toast";
 
 const SignUpPage = () => {
@@ -28,29 +29,33 @@ const SignUpPage = () => {
     if (!formData.email.trim()) return toast.error("Email is required");
     if (!/\S+@\S+\.\S+/.test(formData.email))
       return toast.error("Invalid email format");
-    if (!formData.password.trim()) return toast.error("Password is required");
+    if (!formData.password) return toast.error("Password is required");
     if (formData.password.length < 6)
-      return toast.error("Password should be at least 6 characters");
+      return toast.error("Password must be at least 6 characters");
 
     return true;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const success = validateForm();
-    if (success) {
-      signup(formData);
-    }
+
+    if (success === true) signup(formData);
   };
 
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
-      <div className="flex flex-col items-center justify-center p-6 sm:p-12">
+      {/* left side */}
+      <div className="flex flex-col justify-center items-center p-6 sm:p-12">
         <div className="w-full max-w-md space-y-8">
           {/* LOGO */}
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2 group">
-              <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary-20 transition-colors">
+              <div
+                className="size-12 rounded-xl bg-primary/10 flex items-center justify-center 
+              group-hover:bg-primary/20 transition-colors"
+              >
                 <MessageSquare className="size-6 text-primary" />
               </div>
               <h1 className="text-2xl font-bold mt-2">Create Account</h1>
@@ -63,7 +68,7 @@ const SignUpPage = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="form-control">
               <label className="label">
-                <span className="lable-text font-medium">Full Name</span>
+                <span className="label-text font-medium">Full Name</span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -71,8 +76,8 @@ const SignUpPage = () => {
                 </div>
                 <input
                   type="text"
-                  className="input input-bordered w-full pl-10"
-                  placeholder="Rithik Surya"
+                  className={`input input-bordered w-full pl-10`}
+                  placeholder="John Doe"
                   value={formData.fullname}
                   onChange={(e) =>
                     setFormData({ ...formData, fullname: e.target.value })
@@ -83,7 +88,7 @@ const SignUpPage = () => {
 
             <div className="form-control">
               <label className="label">
-                <span className="lable-text font-medium">Email</span>
+                <span className="label-text font-medium">Email</span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -91,7 +96,7 @@ const SignUpPage = () => {
                 </div>
                 <input
                   type="email"
-                  className="input input-bordered w-full pl-10"
+                  className={`input input-bordered w-full pl-10`}
                   placeholder="you@example.com"
                   value={formData.email}
                   onChange={(e) =>
@@ -103,16 +108,16 @@ const SignUpPage = () => {
 
             <div className="form-control">
               <label className="label">
-                <span className="lable-text font-medium">Password</span>
+                <span className="label-text font-medium">Password</span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Key className="size-5 text-base-content/40" />
+                  <Lock className="size-5 text-base-content/40" />
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
-                  className="input input-bordered w-full pl-10"
-                  placeholder="********"
+                  className={`input input-bordered w-full pl-10`}
+                  placeholder="••••••••"
                   value={formData.password}
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
@@ -151,7 +156,7 @@ const SignUpPage = () => {
           <div className="text-center">
             <p className="text-base-content/60">
               Already have an account?{" "}
-              <Link to="/login" className="text-primary">
+              <Link to="/login" className="link link-primary">
                 Sign in
               </Link>
             </p>
@@ -159,7 +164,7 @@ const SignUpPage = () => {
         </div>
       </div>
 
-      {/* RIGHT SIDE */}
+      {/* right side */}
 
       <AuthImagePattern
         title="Join our community"
@@ -168,5 +173,4 @@ const SignUpPage = () => {
     </div>
   );
 };
-
 export default SignUpPage;

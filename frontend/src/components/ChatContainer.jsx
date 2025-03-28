@@ -1,10 +1,11 @@
+import { useChatStore } from "../store/useChatStore";
 import { useEffect, useRef } from "react";
-import { useChatStore } from "../store/useChatStore.js";
-import ChatHeader from "./ChatHeader.jsx";
-import MessageInput from "./MessageInput.jsx";
-import MessageSkeleton from "./skeletons/MessageSkeleton.jsx";
-import useAuthStore from "../store/useAuthStore.js";
-import { formatMessageTime } from "../lib/utils.js";
+
+import ChatHeader from "./ChatHeader";
+import MessageInput from "./MessageInput";
+import MessageSkeleton from "./skeletons/MessageSkeleton";
+import { useAuthStore } from "../store/useAuthStore";
+import { formatMessageTime } from "../lib/utils";
 
 const ChatContainer = () => {
   const {
@@ -13,23 +14,23 @@ const ChatContainer = () => {
     isMessagesLoading,
     selectedUser,
     subscribeToMessages,
-    unSubscribeToMessages,
+    unsubscribeFromMessages,
   } = useChatStore();
   const { authUser } = useAuthStore();
   const messageEndRef = useRef(null);
 
   useEffect(() => {
     getMessages(selectedUser._id);
+
     subscribeToMessages();
-    return () => {
-      unSubscribeToMessages();
-    };
-  }, [selectedUser, getMessages, subscribeToMessages, unSubscribeToMessages]);
+
+    return () => unsubscribeFromMessages();
+  }, [selectedUser._id, getMessages, subscribeToMessages, unsubscribeFromMessages]);
 
   useEffect(() => {
-    messageEndRef.current.scrollIntoView({
-      behavior: "smooth",
-    });
+    if (messageEndRef.current && messages) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages]);
 
   if (isMessagesLoading) {
@@ -50,9 +51,7 @@ const ChatContainer = () => {
         {messages.map((message) => (
           <div
             key={message._id}
-            className={`chat ${
-              message.senderId === authUser._id ? "chat-end" : "chat-start"
-            }`}
+            className={`chat ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}
             ref={messageEndRef}
           >
             <div className=" chat-image avatar">
@@ -90,5 +89,4 @@ const ChatContainer = () => {
     </div>
   );
 };
-
 export default ChatContainer;

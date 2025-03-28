@@ -18,4 +18,5 @@ const AuthImagePattern = ({ title, subtitle }) => {
     </div>
   );
 };
+
 export default AuthImagePattern;
