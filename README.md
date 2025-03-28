@@ -12,6 +12,8 @@ A real-time chat application built with modern technologies. Connect and chat in
 - Simple, clean, and responsive UI  
 
 ## 🛠 Tech Stack  
-- **Frontend:** React (Vite), DaisyUI, Zustand  
+- **Frontend:** React (Vite), DaisyUI, Zustand
+  ( Zustand is used in the early production, Will be updated to Redux Later )
 - **Backend:** Node.js, Express.js, Socket.io  
-- **Database:** MongoDB  
+- **Database:** MongoDB
+- **Production:** Render.com  
